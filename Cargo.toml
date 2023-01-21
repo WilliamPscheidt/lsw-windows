@@ -8,4 +8,4 @@ edition = "2021"
 [dependencies]
 ansi_term = "0.12"
 prettytable-rs = "^0.10"
-humanize-rs = "0.1"
+structopt = "0.3"
