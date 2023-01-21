@@ -11,7 +11,9 @@ struct Opt {
     #[structopt(short = "g", long = "graph", help = "List all files in current directory with a table")]
     graph: bool,
     #[structopt(short = "c", long = "create", help = "Create a new folder in the current directory")]
-    create: bool
+    create: bool,
+    #[structopt(short = "s", long = "search", help = "Search for a folder")]
+    search: bool,
 }
 
 fn main() {
@@ -22,6 +24,8 @@ fn main() {
         list_files_in_path_with_graph();
     } else if opt.create {
         create_folder_in_path();
+    } else if opt.search {
+        search_file_in_path();
     } else {
         println!("Use lsw -l | lsw -g | lsw -c")
     }   
@@ -41,6 +45,18 @@ fn list_files_in_path_with_graph() {
         table.add_row(row![file_size, Cyan.paint(path.display().to_string())]);
     }
     table.printstd();
+}
+
+fn search_file_in_path() {
+    let mut folder_name_input: String = String::new();
+    println!("{}", "$ Type your folder name: ");
+    io::stdin().read_line(&mut folder_name_input).expect("Invalid folder name");
+    for file in fs::read_dir(".").expect("Invalid path") {
+        let path = file.unwrap().path().display().to_string().replace(".\"", "");
+        if path.trim() == folder_name_input.trim().to_string() {
+            println!("[+] {} found", folder_name_input.to_string().trim())
+        }
+    }
 }
 
 fn list_files_in_path() {
